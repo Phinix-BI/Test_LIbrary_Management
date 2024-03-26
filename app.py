@@ -28,12 +28,14 @@ def index():
 def reader(book_id):
     book_row = books_df[books_df['ID'] == book_id]
     if not book_row.empty:
-        last_page = book_row['Last_page'].idxmax()
-        last_page_image_path =  str(pdf_to_image("Server/Books/"+str(book_row.iloc[0]['Name']+".pdf"), last_page, 150))
+        last_page = book_row.iloc[0]['Last_page']
+        book_path = book_row.iloc[0]['Path']
+        last_page_image_path = str(pdf_to_image(book_path, last_page, 150))
         print(f"Path to Image: {last_page_image_path}")
         return render_template('reader.html', book_id=book_id, last_page_image=last_page_image_path)
     else:
         return "Book not found"
+
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -111,3 +111,14 @@ if __name__=="__main__":
     pride = Book("Pride and Prejudice", "Jane Austen", 1811, "Server/Books/p&p.pdf", "pride.jpeg", "Drama")
     lib1.add_collection([goosebumps, dracula, oliver, meeting, pride])
     lib1.show_books()
+
+
+    books = pd.read_pickle("Server/New_Library.lib")
+    book_row = books[books['ID'] == "esR."]
+    if not book_row.empty:
+        last_page = book_row.iloc[0]['Last_page']
+        book_path = book_row.iloc[0]['Path']
+        print(book_path)
+        print(last_page)
+    else:
+        print("Book not found")

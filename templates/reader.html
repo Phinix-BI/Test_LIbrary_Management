@@ -10,7 +10,7 @@
 
     <body>
         <div class="image-container">
-            <img class="page" src="{{ last_page_image }}">
+            <img class="page" src="{{ url_for('static', filename=last_page_image.replace('\\', '/')) }}">
         </div>
         <div class="Panel">
             <div class="title-author">
