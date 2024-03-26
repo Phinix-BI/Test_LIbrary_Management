@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="{{ url_for('static',filename='main.css') }}">
+    <title>Library Homepage</title>
+</head>
+<body>
+    <main>
+        {% for book in books %}
+        <div class="container" >
+            <div class="inner-containers" id="{{book['ID']}}" onclick="showReader('{{book['ID']}}')">
+                <div class="image-container">
+                    <img class="book-image" src="{{ url_for('static', filename='thumbnails/' + book['Image']) }}">
+                </div>
+                <div class="book-details">
+                    <p class="name">{{ book['Name'] }}</p>
+                    <p class="author">{{ book['Author'] }}</p>
+                    <p class="details">{{ book['Date'] }} &#183; {{ book['Genre'] }}</p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </main>
+
+    <script>
+        function showReader(bookId) {
+            window.location.href = "/reader/" + bookId;
+        }
+    </script>
+</body>
+</html>

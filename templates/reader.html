@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="{{ url_for('static',filename='reader.css') }}">
+        <title>Reader</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    </head>
+
+    <body>
+        <div class="image-container">
+            <img class="page" src="{{ last_page_image }}">
+        </div>
+        <div class="Panel">
+            <div class="title-author">
+                <p class="title">Dracula</p>
+                <p class="author">Bram Stoker</p>
+            </div>
+            <div class="panel-bottom">
+                <div class="button-layout">
+                    <div class="button-layout-left">
+                        <button class="zoom-button">
+                            <img class="zoom" src="{{ url_for('static',filename='icons/circle-half-stroke-solid.svg') }}">
+                        </button>
+                        <button class="zoom-button">
+                            <img class="zoom" src="{{ url_for('static',filename='icons/expand-solid (1).svg') }}">
+                        </button>
+                    </div>
+                    <div class="page-number">
+                        <input class="page-selector" type="text" placeholder="Page no:">
+                        <p>01</p>
+                    </div>
+                </div>
+                <input class="plot" type="text" placeholder="Plot" readonly>
+                <button class="page-turner">Next Page</button>
+                <button class="page-turner">Previous Page</button>
+            </div>
+        </div>
+
+
+    </body>
+</html>
