@@ -1,6 +1,7 @@
-from flask import Flask, render_template, request, jsonify
+import platform
+from flask import Flask, render_template, request, redirect, send_file
 import pandas as pd
-from Backend_Scripts.rendered import pdf_to_image   
+from Backend_Scripts.additional import pdf_to_image  
 from Backend_Scripts.Basic_Logic import Library
 import os
 
@@ -32,12 +33,60 @@ def reader(book_id, last_page=None):
         pd.to_pickle(books_df, "Server/New_Library.lib")
         print(books_df)
 
-        print(last_page)
         last_page_image_path = str(pdf_to_image(book_path, int(last_page), 150))
-        print(f"Path to Image: {last_page_image_path}")
         return render_template('reader.html', book_id=book_id, last_page_image=last_page_image_path, last_page=last_page, book_name=book_name, book_author=book_author)
     else:
         return "Book not found"
+    
+
+
+
+
+@app.route('/reset', methods=['POST'])
+def reset_page():
+    # Retrieve the book_id from the form submission
+    book_id = request.form.get('book_id')
+    
+    if book_id:
+        # Add code here to reset the page
+        # For example:
+        # Reset the last page to the initial page
+        initial_page = 1
+        books_df.loc[books_df['ID'] == book_id, 'Last_page'] = initial_page
+        
+        # Redirect to the reader route with the book ID
+        return redirect(f"/reader/{book_id}/undefined")
+    else:
+        # Handle the case when book_id is not provided
+        return "Book ID not provided"
+    
+@app.route('/fullscreen', methods=['POST'])
+def fullscreen():
+    # Retrieve the book_id from the form data
+    book_id = request.form.get('book_id')
+    path = books_df.loc[books_df['ID'] == book_id].iloc[0]['Path']
+    page_number = books_df.loc[books_df['ID'] == book_id].iloc[0]['Last_page']
+
+    # Ensure that the book_id is not None
+    if book_id is not None:        
+        # Send the PDF file to the browser for display
+        url = f"{path}#page={page_number}"
+        return send_file(path, mimetype='application/pdf', as_attachment=False)
+    else:
+        # Handle the case when book_id is not provided
+        return "Book ID not provided"
+    
+
+@app.route('/gotopage', methods=['POST'])
+def gotopage():
+    page = request.form.get('page')
+    print(page)
+    book_id = request.form.get('book_id')
+    if page == 1:
+        page = "undefined"
+
+    return redirect(f"/reader/{book_id}/{page}")
+    
 
 
 if __name__ == '__main__':

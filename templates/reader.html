@@ -10,7 +10,7 @@
 
     <body>
         <div class="image-container">
-            <img class="page" src="{{ url_for('static', filename=last_page_image.replace('\\', '/')) }}">
+            <img draggable="false" class="page" src="{{ url_for('static', filename=last_page_image.replace('\\', '/')) }}">
         </div>
         <div class="Panel">
             <div class="title-author">
@@ -20,15 +20,24 @@
             <div class="panel-bottom">
                 <div class="button-layout">
                     <div class="button-layout-left">
-                        <button class="zoom-button">
-                            <img class="zoom" src="{{ url_for('static',filename='icons/circle-half-stroke-solid.svg') }}">
-                        </button>
-                        <button class="zoom-button">
-                            <img class="zoom" src="{{ url_for('static',filename='icons/expand-solid (1).svg') }}">
-                        </button>
+                        <form id="resetForm" action="/reset" method="POST">
+                            <input type="hidden" name="book_id" value="{{ book_id }}">
+                            <button class="zoom-button" type="submit">
+                                <img class="zoom" src="{{ url_for('static', filename='icons/icons8-reset-64.png') }}">
+                            </button>
+                        </form>
+                        <form action="/fullscreen" method="POST">
+                            <input type="hidden" name="book_id" value="{{ book_id }}">
+                            <button class="zoom-button" type="submit">
+                                <img class="zoom" src="{{ url_for('static',filename='icons/expand-solid (1).svg') }}">
+                            </button>
+                        </form>
                     </div>
                     <div class="page-number">
-                        <input class="page-selector" type="text" placeholder="Page no:">
+                        <form action="/gotopage" method="POST">
+                            <input type="hidden" name="book_id" value="{{ book_id }}" >
+                            <input class="page-selector" name="page" type="text" placeholder="Page no:">
+                        </form>
                         <p>{{ last_page }}</p>
                     </div>
                 </div>
@@ -58,5 +67,6 @@
 
             }
         </script>
+
     </body>
 </html>

@@ -113,12 +113,12 @@ if __name__=="__main__":
     lib1.show_books()
 
 
-    books = pd.read_pickle("Server/New_Library.lib")
-    book_row = books[books['ID'] == "esR."]
-    if not book_row.empty:
-        last_page = book_row.iloc[0]['Last_page']
-        book_path = book_row.iloc[0]['Path']
-        print(book_path)
-        print(last_page)
-    else:
-        print("Book not found")
+#     books = pd.read_pickle("Server/New_Library.lib")
+#     book_row = books[books['ID'] == "esR."]
+#     if not book_row.empty:
+#         last_page = book_row.iloc[0]['Last_page']
+#         book_path = book_row.iloc[0]['Path']
+#         print(book_path)
+#         print(last_page)
+#     else:
+#         print("Book not found")
