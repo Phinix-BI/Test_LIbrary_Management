@@ -23,8 +23,8 @@
     </main>
 
     <script>
-        function showReader(bookId) {
-            window.location.href = "/reader/" + bookId;
+        function showReader(bookId, lastPage) {
+            window.open("/reader/" + bookId + "/" + lastPage, "_blank");
         }
     </script>
 </body>
