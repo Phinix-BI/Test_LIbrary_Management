@@ -1,0 +1,75 @@
+
+<div class="search-area">
+    <div class="input">
+        <input class="search" type="text" id="search-box" placeholder="Search A Book" autocomplete="off">
+        <img src="static/icons/search.svg">
+    </div>
+    <div class="result-box">
+    </div>
+</div>
+
+<main id="main-content">
+    {% for book in books %}
+    <div class="container" >
+        <div class="inner-containers" id="{{book['ID']}}" onclick="showReader('{{book['ID']}}')">
+            <div class="image-container">
+                <img draggable="false" class="book-image" src="{{ url_for('static', filename='thumbnails/' + book['Image']) }}">
+            </div>
+            <div class="book-details">
+                <p class="name">{{ book['Name'] }}</p>
+                <p class="author">{{ book['Author'] }}</p>
+                <p class="details">{{ book['Date'] }} &#183; {{ book['Genre'] }}</p>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+
+    <p class="section-title">This Month in Horror</p>
+
+
+</main>
+
+<script defer>
+    document.addEventListener('DOMContentLoaded', function() {
+        let available = {{ books_name | tojson }};
+        console.log(available);
+
+        const resultbox = document.querySelector(".result-box");
+        console.log(resultbox);
+
+        // Option 1: Using ID selector (if unique)
+        const inputbox = document.querySelector("#search-box");
+        console.log(inputbox);
+
+        // Check if input box exists before attaching event listener
+        if (inputbox) {
+            inputbox.onkeyup = function() {
+                console.log("Key pressed");
+                let result = [];
+                let input = inputbox.value;
+                console.log(input);
+                if (input.length) {
+                    result = available.filter((keyword) => {
+                        return keyword.toLowerCase().includes(input.toLowerCase());
+                    });
+                    console.log(result);
+                    updateResultBox(result);
+                } else {
+                    updateResultBox([]);
+                }
+            };
+        }
+
+        // Function to update the result box content
+        function updateResultBox(searchResults) {
+            resultbox.innerHTML = '';
+            searchResults.forEach(item => {
+                const resultItem = document.createElement('div');
+                resultItem.classList.add('result-item');
+                resultItem.textContent = item;
+                resultbox.appendChild(resultItem);
+            });
+        }
+    });
+</script>
+

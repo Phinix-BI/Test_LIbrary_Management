@@ -1,31 +1,82 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <link rel="stylesheet" href="{{ url_for('static',filename='main.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
     <title>Library Homepage</title>
 </head>
 <body>
-    <main>
-        {% for book in books %}
-        <div class="container" >
-            <div class="inner-containers" id="{{book['ID']}}" onclick="showReader('{{book['ID']}}')">
-                <div class="image-container">
-                    <img class="book-image" src="{{ url_for('static', filename='thumbnails/' + book['Image']) }}">
-                </div>
-                <div class="book-details">
-                    <p class="name">{{ book['Name'] }}</p>
-                    <p class="author">{{ book['Author'] }}</p>
-                    <p class="details">{{ book['Date'] }} &#183; {{ book['Genre'] }}</p>
-                </div>
-            </div>
-        </div>
-        {% endfor %}
-    </main>
+    <nav>
+        <button id="homeBtn">Library</button>
+        <button id="addBookBtn">Add Book</button>
+        <button id="aboutBtn">About</button>
+        <div id="indicator"></div>
+    </nav>
 
+    <div class="main-area">
+        {% include 'home.html' %}
+    </div>
+
+    <!-- Nav Content Load -->
+    <script>
+        window.addEventListener('DOMContentLoaded', function() {
+            loadContent('/home');
+        });
+
+        document.getElementById('homeBtn').addEventListener('click', function() {
+            loadContent('/home');
+        });
+
+        document.getElementById('addBookBtn').addEventListener('click', function() {
+            loadContent('/add_book');
+        });
+
+        document.getElementById('aboutBtn').addEventListener('click', function() {
+            loadContent('/about');
+        });
+
+        function loadContent(route) {
+            fetch(route)
+                .then(response => response.text())
+                .then(data => {
+                    document.querySelector('.main-area').innerHTML = data;
+                });
+        }
+    </script>
+
+    <!-- Nav Animations -->
+    <script>
+        const indicator = document.getElementById('indicator');
+        const homeBtn = document.getElementById('homeBtn');
+
+        moveIndicator(homeBtn);
+        var currentBtn = homeBtn;
+
+        const addBookBtn = document.getElementById('addBookBtn');
+        const aboutBtn = document.getElementById('aboutBtn');
+
+        window.addEventListener('resize', () => moveIndicator(currentBtn))
+        homeBtn.addEventListener('click', () => moveIndicator(homeBtn));
+        addBookBtn.addEventListener('click', () => moveIndicator(addBookBtn));
+        aboutBtn.addEventListener('click', () => moveIndicator(aboutBtn));
+
+        function moveIndicator(button) {
+            const buttonRect = button.getBoundingClientRect();
+            const navRect = button.parentElement.getBoundingClientRect();
+            const offsetLeft = buttonRect.left - navRect.left;
+            currentBtn = button;
+
+            indicator.style.left = offsetLeft + 'px';
+            indicator.style.width = button.offsetWidth + 'px';
+        }
+    </script>
+
+    <!-- Open Reader -->
     <script>
         function showReader(bookId, lastPage) {
             window.open("/reader/" + bookId + "/" + lastPage, "_blank");
         }
     </script>
+
+    
 </body>
 </html>

@@ -1,4 +1,3 @@
-import platform
 from flask import Flask, render_template, request, redirect, send_file
 import pandas as pd
 from Backend_Scripts.additional import pdf_to_image  
@@ -15,9 +14,9 @@ IMAGE_DIR = os.path.join("static", "Images")
 @app.route('/')
 def index():
     # Render main.html with books data
-    return render_template('main.html', books=books_df.to_dict('records'))
+    return render_template('main.html', books=books_df.to_dict('records'), books_name = books_df['Name'].tolist())
 
-# Route to render reader.html with book ID
+# Route to render reader.html with book IDc
 @app.route('/reader/<book_id>')
 @app.route('/reader/<book_id>/<last_page>')
 def reader(book_id, last_page=None):
@@ -38,6 +37,20 @@ def reader(book_id, last_page=None):
     else:
         return "Book not found"
     
+
+@app.route('/add_book', methods=['GET', 'POST'])
+def add_book():
+    return render_template('add_book.html')
+
+@app.route('/about', methods=['GET', 'POST'])
+def about():
+    return render_template('about.html')
+
+@app.route('/home', methods=['GET', 'POST'])
+def home():
+    return render_template('home.html', books=books_df.to_dict('records'), books_name = books_df['Name'].tolist())
+
+
 
 
 
