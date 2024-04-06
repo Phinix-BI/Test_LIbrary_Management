@@ -1,7 +1,7 @@
 
 <div class="search-area">
     <div class="input">
-        <input class="search" type="text" id="search-box" placeholder="Search A Book" autocomplete="off">
+        <input class="search" type="text" id="search-box" placeholder="Search A Book" onkeyup="searchBooks()" autocomplete="off">
         <img src="static/icons/search.svg">
     </div>
     <div class="result-box">
@@ -28,48 +28,41 @@
 
 
 </main>
+<script >
+    
+   // Define the available books array
+   let available = {{ books_name | tojson }};
 
-<script defer>
-    document.addEventListener('DOMContentLoaded', function() {
-        let available = {{ books_name | tojson }};
-        console.log(available);
+   // Select elements
+   const inputbox = document.querySelector("#search-box");
+   const resultbox = document.querySelector(".result-box");
 
-        const resultbox = document.querySelector(".result-box");
-        console.log(resultbox);
+   // Function to search books
+   const searchBooks = () => {
+      
+       let input = inputbox.value.trim().toLowerCase(); // Trim and convert input to lowercase
 
-        // Option 1: Using ID selector (if unique)
-        const inputbox = document.querySelector("#search-box");
-        console.log(inputbox);
+       if(input.length){
+       let result = available.filter(book => book.toLowerCase().includes(input)); // Filter books based on input
 
-        // Check if input box exists before attaching event listener
-        if (inputbox) {
-            inputbox.onkeyup = function() {
-                console.log("Key pressed");
-                let result = [];
-                let input = inputbox.value;
-                console.log(input);
-                if (input.length) {
-                    result = available.filter((keyword) => {
-                        return keyword.toLowerCase().includes(input.toLowerCase());
-                    });
-                    console.log(result);
-                    updateResultBox(result);
-                } else {
-                    updateResultBox([]);
-                }
-            };
-        }
+       console.log(result);
+       updateResultBox(result); // Update the result box with filtered books
+       }else{
+        updateResultBox([]);
+       }
+   }
 
-        // Function to update the result box content
-        function updateResultBox(searchResults) {
-            resultbox.innerHTML = '';
-            searchResults.forEach(item => {
-                const resultItem = document.createElement('div');
-                resultItem.classList.add('result-item');
-                resultItem.textContent = item;
-                resultbox.appendChild(resultItem);
-            });
-        }
-    });
+   // Function to update the result box
+   function updateResultBox(searchResults) {
+       resultbox.innerHTML = ''; // Clear previous results
+       searchResults.forEach(item => {
+           const resultItem = document.createElement('div');
+           resultItem.classList.add('result-item');
+           resultItem.textContent = item;
+           resultbox.appendChild(resultItem); // Append each result item to the result box
+       });
+   }
+
 </script>
+
 
